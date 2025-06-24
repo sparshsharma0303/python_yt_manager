@@ -1,0 +1,84 @@
+import sqlite3
+
+con = sqlite3.connect("youtube_video.db")
+cursor = con.cursor()
+
+cursor.execute('''
+    CREATE TABLE IF NOT EXISTS videos(
+               id INTEGER PRIMARY KEY AUTOINCREMENT,
+               name TEXT NOT NULL,
+               time TEXT NOT NULL
+    )
+''')
+
+def  listVideos():
+     cursor.execute("SELECT * FROM videos")
+     for row in cursor.fetchall():
+          print(row)
+
+def addVideos(name, time ):
+     cursor.execute("INSERT INTO videos (name , time) VALUES (?,?)",(name, time))
+     con.commit()
+
+def updateVideos(vid_id , name , time):
+    cursor.execute("UPDATE videos SET name = ?, time = ? WHERE id = ?",(name, time, vid_id))
+    con.commit()
+
+
+def deleteVideo(vid_id):
+     cursor.execute("DELETE FROM videos WHERE id = ?",(vid_id,))
+     
+def main():
+        while True:
+            print("\nyoutube manager with sqlite\n")
+            print("1. show all the videos\n")
+            print("2. add video\n")
+            print("3. update video\n")
+            print("4. delete video\n")
+            print("5. break loop\n")
+
+            choice = input("enter your choice: \n")
+
+            if choice == '1':
+                # time.sleep(1)
+
+                listVideos()
+            
+            elif choice == '2':
+                # time.sleep(1)
+                name = input("enter the name of video\n:")
+                time = input("enter the time of video:\n")
+
+                addVideos(name, time)   
+            
+            elif choice == '3':
+                # time.sleep(1)
+                vid_id = input("enter the id of video:\n")
+                name = input("enter the name of video:\n")
+                time = input("enter the time of video:\n")
+                
+                updateVideos(vid_id, name, time)
+                 
+            elif choice == '4':
+                # time.sleep(1)
+                vid_id = input("enter the id of video to be deleted:\n")
+
+                deleteVideo(vid_id)
+                
+            
+            elif choice == '5':
+                break
+
+            else:
+                 break
+            
+
+        con.close()
+                
+
+                 
+
+
+
+if __name__ == "__main__":
+    main()
